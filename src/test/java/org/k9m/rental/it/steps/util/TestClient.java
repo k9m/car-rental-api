@@ -1,7 +1,8 @@
-package org.k9m.rental.it.steps;
+package org.k9m.rental.it.steps.util;
 
 import lombok.Getter;
 import org.k9m.rental.api.model.Customer;
+import org.k9m.rental.api.model.Vehicle;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpEntity;
@@ -34,7 +35,7 @@ public class TestClient {
     }
 
     public Customer addCustomer(Customer customer){
-        return restTemplate.exchange(baseUrl + "/customers", HttpMethod.PUT, new HttpEntity<Customer>(customer), Customer.class).getBody();
+        return restTemplate.exchange(baseUrl + "/customers", HttpMethod.PUT, new HttpEntity<>(customer), Customer.class).getBody();
     }
 
     public Customer getCustomer(Long customerId){
@@ -43,6 +44,19 @@ public class TestClient {
 
     public void deleteCustomer(Long customerId){
         restTemplate.delete(baseUrl + "/customers/" + customerId);
+    }
+
+
+    public Vehicle addVehicle(Vehicle vehicle){
+        return restTemplate.exchange(baseUrl + "/vehicles", HttpMethod.PUT, new HttpEntity<>(vehicle), Vehicle.class).getBody();
+    }
+
+    public Vehicle getVehicle(Long vehicleId){
+        return restTemplate.getForObject(baseUrl + "/vehicles/" + vehicleId, Vehicle.class);
+    }
+
+    public void deleteVehicle(Long vehicleId){
+        restTemplate.delete(baseUrl + "/vehicles/" + vehicleId);
     }
 
 }

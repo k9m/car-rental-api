@@ -210,8 +210,10 @@ components:
           type: integer
         grossPrice:
           type: number
+          format: double
         nettPrice:
           type: number
+          format: double
         hp:
           type: integer
     ErrorObject:
