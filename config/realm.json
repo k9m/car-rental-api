@@ -1,0 +1,72 @@
+{
+  "realm": "kalah-api",
+  "enabled": true,
+  "accessTokenLifespan": 60,
+  "accessCodeLifespan": 60,
+  "accessCodeLifespanUserAction": 300,
+  "ssoSessionIdleTimeout": 600,
+  "ssoSessionMaxLifespan": 36000,
+  "sslRequired": "external",
+  "registrationAllowed": false,
+  "privateKey": "MIICWgIBAAKBgQCWPO9P7Ccg0wiyvz4Z6RYs4140sjX5aWHB6ul7eO1TJDeu2bh2LGBiMc2iigDgxm0QA92+OOBO71X6w9pnhb2lTJmjbvH0cfUGNmWcPM8B1UzoCrGNwQY/AuDDlgiB8C1ITe9am2SoQeEkmqbbE+uoxBgJZ2/FQGZ70KuC6FO80wIDAQABAn8sTsxFReBETfjCvqQSACwKEQQ3hldkty+dgSpav88+NfA2IP/F2lCSpR2AUjLwF5USpBFBiISewvcYfapr3YWQRreG8WVHa3nz843SodVWc+7beQ68g/IL5pvF1w12vduLsymS8WYH0Vjz7QpZ771L0QxLV9lmIKzUnOG5URu5AkEAuumdigmEl7cU8Bz/QHTS3sOy4vtFNACSr4NxbLRzI0yCgiOHGngnbCl3px0A3LTb9X1mFMdHOXHtIu9l7VXlmwJBAM3FCL4tMb/yFR9ESvogpKsFnOQvo9pkZ1Y60y8BpmKs7/xBkrj2w+p5uZZQ9x1502YFEeP5DIQpQWkzV6UY1SkCQQCT2HxblqHB2/h84YLp+j5eJJAYSMb5lkZw/Fi4spesYTWOOQoB3u7X+IkDr8ZhzdF7AkC/yM1G3B3GF3UZYWtnAkBUR77T/jjhUKtcGiHHn3Uy42Kmh+jJ+9PjmsaC+18GDaViIg2RmukV8fOU4ObGeO6gW7U/NfPtceRrzW65nZk5AkBKCajXscIVKWh2wg8VdlUnfl+VNYkYmPQny2t9fnWdSD7I9sG4MSYzhwwiaWgwtpbSlhfNlg7Ax/Cv3chcvyml",
+  "publicKey": "AAAAB3NzaC1yc2EAAAADAQABAAAAgQCWPO9P7Ccg0wiyvz4Z6RYs4140sjX5aWHB6ul7eO1TJDeu2bh2LGBiMc2iigDgxm0QA92+OOBO71X6w9pnhb2lTJmjbvH0cfUGNmWcPM8B1UzoCrGNwQY/AuDDlgiB8C1ITe9am2SoQeEkmqbbE+uoxBgJZ2/FQGZ70KuC6FO80w==",
+  "requiredCredentials": [ "password" ],
+  "users" : [
+    {
+      "username" : "admin",
+      "enabled": true,
+      "email" : "admin@kalah.org",
+      "firstName": "Ad",
+      "lastName": "Min",
+      "credentials" : [
+        { "type" : "password",
+          "value" : "password" }
+      ],
+      "realmRoles": [ "user","admin" ],
+      "clientRoles": {
+        "realm-management": [ "kalah-admin" ]
+      }
+    },
+    {
+      "username" : "player",
+      "enabled": true,
+      "email" : "player@kalah.org",
+      "firstName": "Pla",
+      "lastName": "Yer",
+      "credentials" : [
+        { "type" : "password",
+          "value" : "password" }
+      ],
+      "realmRoles": [ "user" ]
+    }
+  ],
+  "roles" : {
+    "realm" : [
+      {
+        "name": "user",
+        "description": "User privileges"
+      },
+      {
+        "name": "admin",
+        "description": "Administrator privileges"
+      }
+    ]
+  },
+  "clients": [
+    {
+      "clientId": "kalah-player",
+      "standardFlowEnabled": false,
+      "directAccessGrantsEnabled": true,
+      "enabled": true,
+      "adminUrl": "/basicauth",
+      "baseUrl": "/basicauth",
+      "secret": "password",
+      "attributes": {
+        "jwks.url": "http://localhost:8081/auth/realms/kalah-api",
+        "use.jwks.url": "true"
+      },
+      "clientAuthenticatorType": "client-secret"
+    }
+  ]
+
+}

@@ -1,0 +1,233 @@
+openapi: "3.0.2"
+info:
+  version: 1.0.0
+  title: Kalah Game Board
+  license:
+    name: GNU
+servers:
+  - url: http://localhost:8080
+paths:
+
+  /customers:
+    put:
+      summary: Adds a new customer
+      operationId: addCustomer
+      requestBody:
+        description: New Customer to be added
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Customer'
+      responses:
+        '200':
+          description: Created Customer
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Customer"
+        400:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorObject"
+
+  /customers/{customerId}:
+    get:
+      summary: Retrieves a customer
+      operationId: getCustomer
+      parameters:
+        - name: customerId
+          in: path
+          required: true
+          description: customerId
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Customer Details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Customer"
+        404:
+          description: Customer Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorObject"
+
+    delete:
+      summary: Deletes a customer
+      operationId: deleteCustomer
+      parameters:
+        - name: customerId
+          in: path
+          required: true
+          description: customerId
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Deleted Customer Details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Customer"
+        404:
+          description: Customer Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorObject"
+
+
+
+
+
+  /vehicles:
+    put:
+      summary: Adds a new vehicle
+      operationId: addVehicle
+      requestBody:
+        description: New Vehicle to be added
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Vehicle'
+      responses:
+        '200':
+          description: Created Vehicle
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Vehicle"
+        400:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorObject"
+
+  /vehicles/{vehicleId}:
+    get:
+      summary: Retrieves a vehicle
+      operationId: getVehicle
+      parameters:
+        - name: vehicleId
+          in: path
+          required: true
+          description: vehicleId
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Vehicle Details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Vehicle"
+        404:
+          description: Vehicle Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorObject"
+
+    delete:
+      summary: Deletes a vehicle
+      operationId: deleteVehicle
+      parameters:
+        - name: vehicleId
+          in: path
+          required: true
+          description: vehicleId
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Deleted Vehicle Details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Vehicle"
+        404:
+          description: Vehicle Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorObject"
+
+
+
+components:
+  schemas:
+    Customer:
+      type: object
+      required:
+        - name
+        - street
+        - houseNumber
+        - zipcode
+        - place
+        - email
+        - phoneNumber
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        street:
+          type: string
+        houseNumber:
+          type: integer
+        zipcode:
+          type: string
+        place:
+          type: string
+        email:
+          type: string
+        phoneNumber:
+          type: string
+
+    Vehicle:
+      type: object
+      required:
+        - model
+        - version
+        - doors
+        - grossPrice
+        - nettPrice
+        - hp
+      properties:
+        id:
+          type: integer
+        model:
+          type: string
+        version:
+          type: string
+        doors:
+          type: integer
+        grossPrice:
+          type: number
+        nettPrice:
+          type: number
+        hp:
+          type: integer
+    ErrorObject:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        statusCode:
+          type: integer
+          format: int32
+        message:
+          type: string

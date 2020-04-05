@@ -1,0 +1,9 @@
+version: '3.2'
+
+services:
+  car-rental-api:
+    build: .
+    environment:
+      KEYCLOAK_SECRET: $KEYCLOAK_SECRET
+    ports:
+      - "8080:8080"
