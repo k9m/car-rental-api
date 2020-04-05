@@ -14,17 +14,17 @@ public class VehicleController implements VehiclesApi{
 
 
     @Override
-    public ResponseEntity<Vehicle> addVehicle(@Valid Vehicle vehicle) {
+    public ResponseEntity<Vehicle> addVehicle(@Valid final Vehicle vehicle) {
         return null;
     }
 
     @Override
-    public ResponseEntity<Vehicle> deleteVehicle(Long vehicleId) {
+    public ResponseEntity<Void> deleteVehicle(final Long vehicleId) {
         return null;
     }
 
     @Override
-    public ResponseEntity<Vehicle> getVehicle(Long vehicleId) {
+    public ResponseEntity<Vehicle> getVehicle(final Long vehicleId) {
         return null;
     }
 }
