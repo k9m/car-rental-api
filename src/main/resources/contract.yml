@@ -1,7 +1,7 @@
 openapi: "3.0.2"
 info:
   version: 1.0.0
-  title: Kalah Game Board
+  title: Car Rental API
   license:
     name: GNU
 servers:
@@ -158,6 +158,60 @@ paths:
 
 
 
+
+
+
+  /lease:
+    put:
+      summary: Creates a new lease contract
+      operationId: createLease
+      requestBody:
+        description: Lease details
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateLease'
+      responses:
+        '200':
+          description: Created Vehicle
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Lease"
+        400:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorObject"
+
+  /lease/{leaseId}:
+    get:
+      summary: Retrieves a lease
+      operationId: getLease
+      parameters:
+        - name: leaseId
+          in: path
+          required: true
+          description: leaseId
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Lease Details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Lease"
+        404:
+          description: Vehicle Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorObject"
+
 components:
   schemas:
     Customer:
@@ -202,6 +256,8 @@ components:
         id:
           type: integer
           format: int64
+        make:
+          type: string
         model:
           type: string
         version:
@@ -216,6 +272,58 @@ components:
           format: double
         hp:
           type: integer
+
+    CreateLease:
+      type: object
+      required:
+        - customerId
+        - vehicleId
+        - startDate
+        - interestRate
+        - durationMonths
+      properties:
+        customerId:
+          type: integer
+          format: int64
+        vehicleId:
+          type: integer
+          format: int64
+        startDate:
+          type: string
+          format: date
+        durationMonths:
+          type: integer
+        mileagePerYear:
+          type: integer
+        interestRate:
+          type: number
+          format: double
+
+    Lease:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        startDate:
+          type: string
+          format: date
+        durationMonths:
+          type: integer
+        mileagePerYear:
+          type: integer
+        interestRate:
+          type: number
+          format: double
+        leaseRate:
+          type: number
+          format: double
+        customer:
+          $ref: "#/components/schemas/Customer"
+        vehicle:
+          $ref: "#/components/schemas/Vehicle"
+
+
     ErrorObject:
       type: object
       required:

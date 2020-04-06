@@ -16,6 +16,7 @@ public class VehicleDTO {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String make;
     private String model;
     private String version;
     private Integer doors;
@@ -27,6 +28,7 @@ public class VehicleDTO {
     public Vehicle toVehicle(){
         return new Vehicle()
                 .id(id)
+                .make(make)
                 .model(model)
                 .version(version)
                 .doors(doors)
@@ -39,6 +41,7 @@ public class VehicleDTO {
     public static VehicleDTO fromVehicle(final Vehicle vehicle) {
         return new VehicleDTO()
                 .setId(vehicle.getId())
+                .setMake(vehicle.getMake())
                 .setModel(vehicle.getModel())
                 .setVersion(vehicle.getVersion())
                 .setDoors(vehicle.getDoors())

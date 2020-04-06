@@ -1,7 +1,7 @@
 package org.k9m.rental.api;
 
 import lombok.RequiredArgsConstructor;
-import org.k9m.rental.api.exception.CustomerNotFoundException;
+import org.k9m.rental.api.exception.VehicleNotFoundException;
 import org.k9m.rental.api.model.Vehicle;
 import org.k9m.rental.persistence.model.VehicleDTO;
 import org.k9m.rental.persistence.repository.VehicleRepository;
@@ -28,7 +28,7 @@ public class VehicleController implements VehiclesApi{
     public ResponseEntity<Vehicle> getVehicle(final Long vehicleId) {
         return ResponseEntity.ok(
                 vehicleRepository.findById(vehicleId)
-                        .orElseThrow(() -> new CustomerNotFoundException("Vehicle not found with id: " + vehicleId)).toVehicle());
+                        .orElseThrow(() -> new VehicleNotFoundException("Vehicle not found with id: " + vehicleId)).toVehicle());
     }
 
     @Override

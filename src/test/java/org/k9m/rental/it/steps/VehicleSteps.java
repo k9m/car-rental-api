@@ -30,44 +30,44 @@ public class VehicleSteps {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private Vehicle lastSavedVehicle;
-    private Vehicle lastRetrievedVehicle;
-    private HttpClientErrorException lastThrownException;
+    @Autowired
+    private TestContext testContext;
+
 
     @When("a new Vehicle with below details is added")
     public void aNewVehicleWithBelowDetailsIsAdded(final DataTable dataTable) {
         try {
-            lastSavedVehicle = testClient.addVehicle(dataTable.<Vehicle>asList(Vehicle.class).get(0));
+            testContext.lastSavedVehicle = testClient.addVehicle(dataTable.<Vehicle>asList(Vehicle.class).get(0));
         } catch (HttpClientErrorException e) {
-            lastThrownException = e;
+            testContext.lastThrownException = e;
         }
     }
 
     @Then("this last saved Vehicle should be retrieved by its generated id")
     public void thisLastSavedVehicleShouldBeRetrievedByItsGeneratedId() {
-        assertNotNull("Vehicle shouldn't be null", lastSavedVehicle);
+        assertNotNull("Vehicle shouldn't be null", testContext.lastSavedVehicle);
         try {
-            lastRetrievedVehicle = testClient.getVehicle(lastSavedVehicle.getId());
+            testContext.lastRetrievedVehicle = testClient.getVehicle(testContext.lastSavedVehicle.getId());
         } catch (HttpClientErrorException e) {
-            lastThrownException = e;
+            testContext.lastThrownException = e;
         }
     }
 
     @And("the Vehicle details should match")
     public void theDetailsShouldMatch() {
-        assertNotNull("Vehicle shouldn't be null", lastRetrievedVehicle);
-        assertThat(lastSavedVehicle, is(lastRetrievedVehicle));
+        assertNotNull("Vehicle shouldn't be null", testContext.lastRetrievedVehicle);
+        assertThat(testContext.lastRetrievedVehicle, is(testContext.lastSavedVehicle));
     }
 
     @Then("deleting this Vehicle")
     public void deletingThisVehicle() {
-        testClient.deleteVehicle(lastSavedVehicle.getId());
+        testClient.deleteVehicle(testContext.lastSavedVehicle.getId());
     }
 
     @Then("^a Vehicle error should be returned with message containing: (.*) and status code: (\\d+)$")
     public void errorMsgContains(String message, int statusCode) throws JsonProcessingException {
-        assertNotNull("Error shouldn't be null", lastThrownException);
-        final ErrorObject errorObject = objectMapper.readValue(lastThrownException.getResponseBodyAsString(), ErrorObject.class);
+        assertNotNull("Error shouldn't be null", testContext.lastThrownException);
+        final ErrorObject errorObject = objectMapper.readValue(testContext.lastThrownException.getResponseBodyAsString(), ErrorObject.class);
 
         assertThat(errorObject.getMessage(), containsString(message));
         assertThat(errorObject.getStatusCode(), is(statusCode));
@@ -76,6 +76,7 @@ public class VehicleSteps {
     @DataTableType
     public Vehicle vehicleEntry(Map<String, String> entry) {
         return new Vehicle()
+                .make(entry.get("model"))
                 .model(entry.get("model"))
                 .version(entry.get("version"))
                 .doors(Integer.parseInt(entry.get("doors")))
