@@ -1,0 +1,38 @@
+version: '3.2'
+
+services:
+  mysql:
+    image: mysql:8.0
+    env_file: .env
+    restart: unless-stopped
+    environment:
+      - MYSQL_DATABASE=$KEYCLOAK_DB
+    command: '--default-authentication-plugin=mysql_native_password'
+    volumes:
+      - ./build/volumes/mysql:/data/db
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    env_file: .env
+    command:
+      - "-b"
+      - "0.0.0.0"
+      - "-Dkeycloak.migration.action=import"
+      - "-Dkeycloak.migration.provider=singleFile"
+      - "-Dkeycloak.migration.file=/config/realm.json"
+      - "-Dkeycloak.migration.strategy=OVERWRITE_EXISTING"
+      - "-Djboss.http.port=8081"
+    volumes:
+      - ./config:/config/
+    environment:
+      DB_VENDOR: MYSQL
+      DB_ADDR: mysql
+      DB_DATABASE: $KEYCLOAK_DB
+      DB_USER: $MYSQL_USER
+      DB_PASSWORD: $MYSQL_PASSWORD
+      KEYCLOAK_USER: $KEYCLOAK_USER
+      KEYCLOAK_PASSWORD: $KEYCLOAK_PASSWORD
+    ports:
+      - "8081:8081"
+    depends_on:
+      - mysql
