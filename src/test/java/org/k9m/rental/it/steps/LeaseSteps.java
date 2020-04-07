@@ -1,8 +1,8 @@
 package org.k9m.rental.it.steps;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.DataTableType;
+import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import lombok.extern.slf4j.Slf4j;
 import org.k9m.rental.api.model.CreateLease;
@@ -25,34 +25,31 @@ public class LeaseSteps {
     private TestClient testClient;
 
     @Autowired
-    private ObjectMapper objectMapper;
-
-    @Autowired
-    private TestContext testContext;
+    private TestContext ctx;
 
     @When("creating a Lease with below details")
     public void createLease(final DataTable dataTable) {
-        testContext.createLease = dataTable.<CreateLease>asList(CreateLease.class).get(0);
-        testContext.createLease.setCustomerId(testContext.lastSavedCustomer.getId());
-        testContext.createLease.setVehicleId(testContext.lastSavedVehicle.getId());
+        ctx.createLease = dataTable.<CreateLease>asList(CreateLease.class).get(0);
+        ctx.createLease.setCustomerId(ctx.lastSavedCustomer.getId());
+        ctx.createLease.setVehicleId(ctx.lastSavedVehicle.getId());
 
         try {
-            testContext.lastSavedLease = testClient.createLease(testContext.createLease);
+            ctx.lastSavedLease = testClient.createLease(ctx.createLease);
         } catch (HttpClientErrorException e) {
-            testContext.lastThrownException = e;
+            ctx.lastThrownException = e;
         }
     }
 
     @When("the created Lease should have these details")
     public void verifyLease(final DataTable dataTable) {
         Lease expected = dataTable.<Lease>asList(Lease.class).get(0);
-        assertNotNull(testContext.lastSavedLease);
+        assertNotNull(ctx.lastSavedLease);
 
-        assertThat(testContext.lastSavedLease.getDurationMonths(), is(expected.getDurationMonths()));
-        assertThat(testContext.lastSavedLease.getInterestRate(), is(expected.getInterestRate()));
-        assertThat(testContext.lastSavedLease.getMileagePerYear(), is(expected.getMileagePerYear()));
-        assertThat(testContext.lastSavedLease.getStartDate(), is(expected.getStartDate()));
-        assertThat(testContext.lastSavedLease.getLeaseRate(), is(expected.getLeaseRate()));
+        assertThat(ctx.lastSavedLease.getDurationMonths(), is(expected.getDurationMonths()));
+        assertThat(ctx.lastSavedLease.getInterestRate(), is(expected.getInterestRate()));
+        assertThat(ctx.lastSavedLease.getMileagePerYear(), is(expected.getMileagePerYear()));
+        assertThat(ctx.lastSavedLease.getStartDate(), is(expected.getStartDate()));
+        assertThat(ctx.lastSavedLease.getLeaseRate(), is(expected.getLeaseRate()));
     }
 
 
@@ -65,6 +62,22 @@ public class LeaseSteps {
                 .mileagePerYear(Integer.parseInt(entry.get("mileagePerYear")));
     }
 
+    @Then("this last saved Lease should be retrieved by its generated id")
+    public void thisLastSavedVehicleShouldBeRetrievedByItsGeneratedId() {
+        assertNotNull("Lease shouldn't be null", ctx.lastSavedLease);
+        try {
+            ctx.lastRetrievedLease = testClient.getLease(ctx.lastSavedLease.getId());
+        } catch (HttpClientErrorException e) {
+            ctx.lastThrownException = e;
+        }
+    }
+
+    @Then("deleting this lease")
+    public void deletingThisLease() {
+        testClient.deleteLease(ctx.lastSavedLease.getId());
+    }
+
+
     @DataTableType
     public Lease leaseEntry(Map<String, String> entry) {
         return new Lease()
@@ -74,6 +87,4 @@ public class LeaseSteps {
                 .durationMonths(Integer.parseInt(entry.get("durationMonths")))
                 .mileagePerYear(Integer.parseInt(entry.get("mileagePerYear")));
     }
-
-
 }

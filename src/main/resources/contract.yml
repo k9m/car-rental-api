@@ -212,6 +212,27 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorObject"
 
+    delete:
+      summary: Deletes a lease
+      operationId: deleteLease
+      parameters:
+        - name: leaseId
+          in: path
+          required: true
+          description: leaseId
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Deleted Lease Details
+        404:
+          description: Vehicle Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorObject"
+
 components:
   schemas:
     Customer:

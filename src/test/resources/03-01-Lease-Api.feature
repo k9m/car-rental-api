@@ -4,7 +4,7 @@ Feature: Lease API test
     Given the system has started up
     Given and the database is empty
 
-  Scenario: Creating a new Lease then retrieving it by its id
+  Scenario: Creating a new Lease then retrieving it by its id then deleting it and trying to retrieve again
     When a new Customer with below details is added
       | name         | street        | houseNumber | zipcode | place     | email                 | phoneNumber |
       | Johan Droost | Kasperskylaan | 123         | 1011XC  | Amsterdam | johan.droost@test.com | 0612345678  |
@@ -16,5 +16,9 @@ Feature: Lease API test
       | 2020-01-01 | 4.5          | 60             | 45000          |
     Then the created Lease should have these details
       | startDate  | interestRate | durationMonths | mileagePerYear | leaseRate |
-      | 2020-01-01 | 4.5          | 60             | 45000          | 239.82     |
+      | 2020-01-01 | 4.5          | 60             | 45000          | 239.82    |
+    Then this last saved Lease should be retrieved by its generated id
+    Then deleting this lease
+    Then this last saved Lease should be retrieved by its generated id
+    Then an error should be returned with message containing: Lease not found with id: and status code: 404
 

@@ -17,10 +17,10 @@ Feature: Vehicle API test
       | Lexus | IS220d | Sport   | 4     | 44285      | 28488     | 177 |
     Then deleting this Vehicle
     Then this last saved Vehicle should be retrieved by its generated id
-    Then a Vehicle error should be returned with message containing: Vehicle not found with id: and status code: 404
+    Then an error should be returned with message containing: Vehicle not found with id: and status code: 404
 
   Scenario: Adding a new Vehicle with missing mandatory data should fail to validate
     When a new Vehicle with below details is added
       | make  | version | doors | grossPrice | nettPrice | hp  |
       | Lexus | Sport   | 4     | 44285      | 28488     | 177 |
-    Then a Vehicle error should be returned with message containing: Validation failed for argument and status code: 400
+    Then an error should be returned with message containing: Validation failed for argument and status code: 400

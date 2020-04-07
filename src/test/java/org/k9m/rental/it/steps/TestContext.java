@@ -18,6 +18,7 @@ public class TestContext {
 
     CreateLease createLease;
     Lease lastSavedLease;
+    Lease lastRetrievedLease;
 
     HttpClientErrorException lastThrownException;
 

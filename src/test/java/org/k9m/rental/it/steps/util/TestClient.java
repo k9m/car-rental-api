@@ -66,4 +66,12 @@ public class TestClient {
         return restTemplate.exchange(baseUrl + "/lease", HttpMethod.PUT, new HttpEntity<>(createLease), Lease.class).getBody();
     }
 
+    public Lease getLease(Long leaseId){
+        return restTemplate.getForObject(baseUrl + "/lease/" + leaseId, Lease.class);
+    }
+
+    public void deleteLease(Long leaseId){
+        restTemplate.delete(baseUrl + "/lease/" + leaseId);
+    }
+
 }

@@ -26,4 +26,10 @@ public class LeaseController implements LeaseApi{
     public ResponseEntity<Lease> getLease(final Long leaseId) {
         return ResponseEntity.ok(leaseService.getLease(leaseId));
     }
+
+    @Override
+    public ResponseEntity<Void> deleteLease(final Long leaseId) {
+        leaseService.delete(leaseId);
+        return ResponseEntity.noContent().build();
+    }
 }

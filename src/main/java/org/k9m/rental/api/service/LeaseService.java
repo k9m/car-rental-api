@@ -51,4 +51,8 @@ public class LeaseService {
     public Lease getLease(final Long leaseId) {
         return leaseRepository.findById(leaseId).orElseThrow(() -> new LeaseNotFoundException("Lease not found with id: " + leaseId)).toLease();
     }
+
+    public void delete(final Long leaseId) {
+        leaseRepository.deleteById(leaseId);
+    }
 }
